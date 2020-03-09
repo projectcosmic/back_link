@@ -1,0 +1,4 @@
+name: 'Back Link'
+description: 'Add links to pages that point to the previous page.'
+type: module
+core_version_requirement: ^8.8 || ^9

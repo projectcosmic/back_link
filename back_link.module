@@ -1,0 +1,78 @@
+<?php
+
+/**
+ * @file
+ * Add links to pages that point to the previous page.
+ */
+
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\node\NodeInterface;
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function back_link_entity_extra_field_info() {
+  $entity_manager = \Drupal::entityTypeManager();
+  $extra = [];
+
+  if ($entity_manager->hasDefinition('node_type')) {
+    $node_bundles = $entity_manager->getStorage('node_type')->loadMultiple();
+
+    foreach ($node_bundles as $bundle) {
+      $extra['node'][$bundle->id()]['display']['back_link'] = [
+        'label' => t('Back link'),
+        'description' => t('Link to go back to the previous page.'),
+        'visible' => FALSE,
+      ];
+    }
+  }
+
+  return $extra;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for node_type_form.
+ */
+function back_link_form_node_type_form_alter(array &$form, FormStateInterface $form_state) {
+  /** @var \Drupal\node\NodeTypeInterface $type */
+  $type = $form_state->getFormObject()->getEntity();
+
+  $form['back_link'] = [
+    '#type' => 'details',
+    '#title' => t('Back Link settings'),
+    '#group' => 'additional_settings',
+  ];
+  $form['back_link']['fallback_url'] = [
+    '#type' => 'textfield',
+    '#title' => t('Fallback URL'),
+    '#default_value' => $type->getThirdPartySetting('back_link', 'fallback_url'),
+    '#description' => t('The fallback URL for the back link if the <code>Referer</code> header value is invalid.'),
+  ];
+  $form['#entity_builders'][] = 'back_link_entity_type_builder';
+}
+
+/**
+ * Entity builder for the node type form with back-link options.
+ *
+ * @see back_link_form_node_type_form_alter()
+ */
+function back_link_entity_type_builder($entity_type, ConfigEntityInterface $type, &$form, FormStateInterface $form_state) {
+  $type->setThirdPartySetting('back_link', 'fallback_url', $form_state->getValue('fallback_url'));
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view() for node.
+ */
+function back_link_node_view(array &$build, NodeInterface $node, EntityViewDisplayInterface $display) {
+  if ($back_link = $display->getComponent('back_link')) {
+    $fallback_url = $node->type->entity->getThirdPartySetting('back_link', 'fallback_url');
+
+    $build['back_link'] = [
+      '#lazy_builder' => ['back_link.lazy_builders:renderBackLink', [$fallback_url]],
+      '#create_placeholder' => TRUE,
+      '#weight' => $back_link['weight'],
+    ];
+  }
+}

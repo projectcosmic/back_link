@@ -1,0 +1,9 @@
+# Schema for configuration files of the Back Link module.
+
+node.type.*.third_party.back_link:
+  type: mapping
+  label: 'Back link display settings'
+  mapping:
+    fallback_url:
+      type: uri
+      label: 'Fallback URL'

@@ -1,0 +1,8 @@
+services:
+  back_link.lazy_builders:
+    class: Drupal\back_link\BackLinkLazyBuilders
+    arguments: ['@back_link.referrer', '@string_translation']
+
+  back_link.referrer:
+    class: \Drupal\back_link\Referrer
+    arguments: ['@request_stack', '@path.matcher', '@settings']
