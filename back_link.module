@@ -39,27 +39,18 @@ function back_link_form_node_type_form_alter(array &$form, FormStateInterface $f
   /** @var \Drupal\node\NodeTypeInterface $type */
   $type = $form_state->getFormObject()->getEntity();
 
-  $form['back_link'] = [
+  $form['third_party_settings']['#tree'] = TRUE;
+  $form['third_party_settings']['back_link'] = [
     '#type' => 'details',
     '#title' => t('Back Link settings'),
     '#group' => 'additional_settings',
   ];
-  $form['back_link']['fallback_url'] = [
+  $form['third_party_settings']['back_link']['fallback_url'] = [
     '#type' => 'textfield',
     '#title' => t('Fallback URL'),
     '#default_value' => $type->getThirdPartySetting('back_link', 'fallback_url'),
     '#description' => t('The fallback URL for the back link if the <code>Referer</code> header value is invalid.'),
   ];
-  $form['#entity_builders'][] = 'back_link_entity_type_builder';
-}
-
-/**
- * Entity builder for the node type form with back-link options.
- *
- * @see back_link_form_node_type_form_alter()
- */
-function back_link_entity_type_builder($entity_type, ConfigEntityInterface $type, &$form, FormStateInterface $form_state) {
-  $type->setThirdPartySetting('back_link', 'fallback_url', $form_state->getValue('fallback_url'));
 }
 
 /**
