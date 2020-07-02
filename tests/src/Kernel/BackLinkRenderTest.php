@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\back_link\Kernel\Node;
+namespace Drupal\Tests\back_link\Kernel;
 
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Url;
