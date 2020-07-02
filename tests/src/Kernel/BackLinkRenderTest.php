@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\back_link\Kernel;
 
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Url;
 use Drupal\KernelTests\Core\Entity\EntityKernelTestBase;
 use Drupal\node\Entity\Node;
