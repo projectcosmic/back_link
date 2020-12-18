@@ -17,15 +17,12 @@ class BackLinkRenderTest extends EntityKernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
-    'back_link',
-    'node',
-  ];
+  protected static $modules = ['back_link', 'node'];
 
   /**
    * {@inheritdoc}
    */
-  protected function setUp() {
+  protected function setUp(): void {
     parent::setUp();
 
     $this->installConfig('system');

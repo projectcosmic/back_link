@@ -14,10 +14,7 @@ class ReferrerTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
-    'back_link',
-    'system',
-  ];
+  protected static $modules = ['back_link', 'system'];
 
   /**
    * Make a request with the provided Referer header.
