@@ -87,7 +87,7 @@ class Referrer implements ReferrerInterface {
       }
     }
 
-    if (!$parsed['path']) {
+    if (empty($parsed['path'])) {
       return NULL;
     }
 

@@ -52,6 +52,9 @@ class ReferrerTest extends KernelTestBase {
       'Any referrer host should give a URL object if no trusted hosts set.'
     );
 
+    $this->makeReferrerRequest('https://cosmic.org.uk');
+    $this->assertNull($referrer->parseReferrer(), 'Null path should return null.');
+
     $referrer_with_trusted = new TestReferrer(
       $this->container->get('request_stack'),
       $this->container->get('path.matcher'),
